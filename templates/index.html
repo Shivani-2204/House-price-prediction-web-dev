@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Price Predictor</title>
+    <style>
+        
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #5c3b1e;
+            background: url('/static/background.jpg') no-repeat center center/cover;
+        }
+
+        /*   container box */
+        .container {
+            max-width: 500px;
+            background-color: rgba(255, 255, 255, 0.85);  
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            padding: 40px;
+            text-align: center;
+        }
+
+        /*  heading */
+        .container h1 {
+            font-size: 32px;
+            color: black;  
+            font-weight: bold;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+
+        label {
+            font-size: 15px;
+            color: #5c3b1e;
+            margin-bottom: 6px;
+            display: block;
+            text-align: left;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e1c2a0;
+            border-radius: 10px;
+            font-size: 16px;
+            background-color: #fff9f0;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #4CAF50; 
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color:rgb(27, 94, 30); 
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+                width: 90%;
+            }
+
+            button {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>House Price Predictor</h1>
+    <form id="price-form">
+        <label for="age">House Age:</label>
+        <input type="number" id="age" name="age" required>
+        
+        <label for="distance">Distance to MRT:</label>
+        <input type="number" id="distance" name="distance" required>
+        
+        <label for="stores">Number of Stores Nearby:</label>
+        <input type="number" id="stores" name="stores" required>
+        
+        <button type="submit">Predict Price</button>
+    </form>
+    <div id="result"></div>
+</div>
+
+<script>
+    document.getElementById('price-form').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        const formData = new FormData(this);
+        const response = await fetch('/predict', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        document.getElementById('result').innerText = result.price || result.error;
+    });
+</script>
+</body>
+</html>
